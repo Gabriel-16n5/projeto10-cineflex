@@ -1,18 +1,37 @@
 import styled from "styled-components"
+import React, { useEffect } from "react";
+import { Link, Params, useParams } from "react-router-dom";
+import axios from "axios";
+
 
 export default function SessionsPage() {
+    const [sessões, setSessões] = React.useState(null);
+    const idFilme = useParams();
+    useEffect(() => {
+        
+        const promise = axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/movies/${idFilme.idFilme}/showtimes`)
+        promise.then((ok) => setSessões(ok.data))
+    }, [])
+
+    if (sessões === null){
+        return <p>carregando</p>
+    }
+    else{
 
     return (
         <PageContainer>
             Selecione o horário
             <div>
                 <SessionContainer>
-                    Sexta - 03/03/2023
-                    <ButtonsContainer>
-                        <button>14:00</button>
-                        <button>15:00</button>
+                {sessões.days.map((disponível) => 
+                <><Text>{disponível.weekday} - {disponível.date}</Text>
+                    <ButtonsContainer key={disponível.id}>
+                       {disponível.showtimes.map((time) => <><Link to={`/assentos/${time.id}`}><button>{time.name}</button></Link></>)}
                     </ButtonsContainer>
+                </>
+                )}
                 </SessionContainer>
+                
             </div>
 
             <FooterContainer>
@@ -25,8 +44,26 @@ export default function SessionsPage() {
             </FooterContainer>
 
         </PageContainer>
-    )
+        )
+    }
 }
+const Text = styled.p`
+    width: 261px;
+    height: 35px;
+    left: 24px;
+    top: 170px;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 23px;
+    display: flex;
+    justify-content: flex-start;
+    margin-right: 20px;
+    align-items: center;
+    letter-spacing: 0.02em;
+    color: #293845;
+`
 
 const PageContainer = styled.div`
     display: flex;

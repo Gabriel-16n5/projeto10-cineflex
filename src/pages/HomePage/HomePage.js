@@ -1,26 +1,27 @@
+import axios from "axios"
+import { useEffect } from "react"
+import { Link } from "react-router-dom"
 import styled from "styled-components"
+import React from "react"
 
 export default function HomePage() {
+    const [listaFilmes, setListaFilmes] = React.useState([]);
+
+    useEffect(() => {
+        const promise = axios.get("https://mock-api.driven.com.br/api/v8/cineflex/movies");
+        promise.then((ok) => { setListaFilmes(ok.data) })
+    }, [])
+    console.log(listaFilmes)
     return (
         <PageContainer>
             Selecione o filme
 
             <ListContainer>
-                <MovieContainer>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster"/>
-                </MovieContainer>
-
-                <MovieContainer>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster"/>
-                </MovieContainer>
-
-                <MovieContainer>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster"/>
-                </MovieContainer>
-
-                <MovieContainer>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster"/>
-                </MovieContainer>
+                {listaFilmes.map((filmes) =>
+                        <MovieContainer>
+                            <Link to={`/sessoes/${filmes.id}`}><img src={filmes.posterURL} alt="poster" /></Link>
+                        </MovieContainer>
+                )}
             </ListContainer>
 
         </PageContainer>

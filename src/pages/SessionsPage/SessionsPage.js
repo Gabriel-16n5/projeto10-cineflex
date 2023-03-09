@@ -26,7 +26,7 @@ export default function SessionsPage() {
                 <div data-test="movie-day">
                         <Text  key={i}>{disponível.weekday} - {disponível.date}</Text>
                         <ButtonsContainer  key={disponível.id}>
-                        {disponível.showtimes.map((time, i) => <><Link key={i} to={`/assentos/${time.id}`}><button data-test="movie-showtime">{time.name}</button></Link></>)}
+                        {disponível.showtimes.map((time, i) => <><Link key={i} to={`/assentos/${time.id}`}><button data-test="showtime">{time.name}</button></Link></>)}
                         </ButtonsContainer>
                  </div>
 

@@ -25,8 +25,8 @@ export default function SessionsPage() {
                 {sessões.days.map((disponível, i) => 
                 <div data-test="movie-day">
                     <><Text key={i}>{disponível.weekday} - {disponível.date}</Text>
-                        <ButtonsContainer data-test="movie-showtime" key={disponível.id}>
-                        {disponível.showtimes.map((time, i) => <><Link key={i} to={`/assentos/${time.id}`}><button>{time.name}</button></Link></>)}
+                        <ButtonsContainer  key={disponível.id}>
+                        {disponível.showtimes.map((time, i) => <><Link data-test="movie-showtime" key={i} to={`/assentos/${time.id}`}><button>{time.name}</button></Link></>)}
                         </ButtonsContainer>
                     </>
                 </div>

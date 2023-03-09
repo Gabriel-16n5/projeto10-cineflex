@@ -12,7 +12,6 @@ export default function SessionsPage() {
         const promise = axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/movies/${idFilme.idFilme}/showtimes`)
         promise.then((ok) => setSessões(ok.data))
     }, [])
-
     if (sessões === null){
         return <p>carregando</p>
     }
@@ -23,23 +22,25 @@ export default function SessionsPage() {
             Selecione o horário
             <div>
                 <SessionContainer>
-                {sessões.days.map((disponível) => 
-                <><Text>{disponível.weekday} - {disponível.date}</Text>
-                    <ButtonsContainer key={disponível.id}>
-                       {disponível.showtimes.map((time) => <><Link to={`/assentos/${time.id}`}><button>{time.name}</button></Link></>)}
-                    </ButtonsContainer>
-                </>
+                {sessões.days.map((disponível, i) => 
+                <div data-test="movie-day">
+                    <><Text key={i}>{disponível.weekday} - {disponível.date}</Text>
+                        <ButtonsContainer data-test="movie-showtime" key={disponível.id}>
+                        {disponível.showtimes.map((time, i) => <><Link key={i} to={`/assentos/${time.id}`}><button>{time.name}</button></Link></>)}
+                        </ButtonsContainer>
+                    </>
+                </div>
                 )}
                 </SessionContainer>
                 
             </div>
 
-            <FooterContainer>
+            <FooterContainer data-test="footer">
                 <div>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster" />
+                    <img src={sessões.posterURL} alt={sessões.title} />
                 </div>
                 <div>
-                    <p>Tudo em todo lugar ao mesmo tempo</p>
+                    <p>{sessões.title}</p>
                 </div>
             </FooterContainer>
 

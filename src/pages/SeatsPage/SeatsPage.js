@@ -1,56 +1,74 @@
 import styled from "styled-components"
+import React, { useEffect } from "react";
+import { Link, Params, useParams } from "react-router-dom";
+import axios from "axios";
+
 
 export default function SeatsPage() {
+    const [assento, setAssento] = React.useState(null);
+    const sessão = useParams();
 
+    useEffect(() => {
+        const promise = axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${sessão.idSessao}/seats`)
+        promise.then((ok) => setAssento(ok.data))
+        
+    }, [])
+    
+    if (assento === null){
+        return <p>carregando</p>
+    }
+    else{
+        const {id, name, day: {weekday}, movie: {title, posterURL} } = assento;
     return (
         <PageContainer>
             Selecione o(s) assento(s)
 
             <SeatsContainer>
-                <SeatItem>01</SeatItem>
-                <SeatItem>02</SeatItem>
-                <SeatItem>03</SeatItem>
-                <SeatItem>04</SeatItem>
-                <SeatItem>05</SeatItem>
+                {assento.seats.map((posição) => 
+                <>
+                <SeatItem data-test="seat" key={posição.id}>{posição.name}</SeatItem>
+                </>
+                )}
             </SeatsContainer>
 
             <CaptionContainer>
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle data-test="seat" />
                     Selecionado
                 </CaptionItem>
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle data-test="seat" />
                     Disponível
                 </CaptionItem>
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle data-test="seat" />
                     Indisponível
                 </CaptionItem>
             </CaptionContainer>
 
             <FormContainer>
                 Nome do Comprador:
-                <input placeholder="Digite seu nome..." />
+                <input data-test="client-name" placeholder="Digite seu nome..." />
 
                 CPF do Comprador:
-                <input placeholder="Digite seu CPF..." />
+                <input data-test="client-cpf" placeholder="Digite seu CPF..." />
 
-                <button>Reservar Assento(s)</button>
+                <Link to="/sucesso"><button data-test="book-seat-btn" >Reservar Assento(s)</button></Link>
             </FormContainer>
 
-            <FooterContainer>
+            <FooterContainer data-test="footer">
                 <div>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster" />
+                    <img src={posterURL} alt="poster" />
                 </div>
                 <div>
-                    <p>Tudo em todo lugar ao mesmo tempo</p>
-                    <p>Sexta - 14h00</p>
+                    <p>{title}</p>
+                    <p>{`${weekday} - ${name}`}</p>
                 </div>
             </FooterContainer>
 
         </PageContainer>
     )
+}
 }
 
 const PageContainer = styled.div`

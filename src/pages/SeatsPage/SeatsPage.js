@@ -100,7 +100,7 @@ export default function SeatsPage({setCompradorCpf, setCompradorNome, setLugar, 
 
                     CPF do Comprador:
                     <input data-test="client-cpf" placeholder="Digite seu CPF..." 
-                    type="number"
+                    type="text"
                     name={"cpf"}
                     value={form.cpf}
                     onChange={attDados}

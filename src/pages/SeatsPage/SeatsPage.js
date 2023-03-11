@@ -14,6 +14,9 @@ export default function SeatsPage() {
         console.log(posição)
         setSituaçãoAssento([...situaçãoAssento, posição]);
         setSituaçãoAssentoAux([...situaçãoAssentoAux, posição])
+        if(posição.isAvailable === false){
+            alert("Esse está ocupado")
+        }
     }
 
     useEffect(() => {

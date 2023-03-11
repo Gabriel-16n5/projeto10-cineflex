@@ -4,29 +4,42 @@ import { Link, Params, useParams } from "react-router-dom";
 import axios from "axios";
 
 
-export default function SessionsPage() {
+export default function SessionsPage({setNomeDoFilme, setData, setHorário}) {
     const [sessões, setSessões] = React.useState(null);
     const idFilme = useParams();
+    
+    function pegaHorário(time){
+        setHorário(time)
+    }
+
+    function pegaData(data){
+        console.log(data)
+        setData(data)
+    }
+
     useEffect(() => {
         
         const promise = axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/movies/${idFilme.idFilme}/showtimes`)
         promise.then((ok) => setSessões(ok.data))
+        setNomeDoFilme([])
     }, [])
+    
     if (sessões === null){
         return <p>carregando</p>
     }
     else{
-
+        setTimeout(setNomeDoFilme(sessões.title), 3000)
     return (
         <PageContainer>
             Selecione o horário
             <div>
                 <SessionContainer>
                 {sessões.days.map((disponível, i) => 
-                <div data-test="movie-day">
-                        <Text  key={i}>{disponível.weekday} - {disponível.date}</Text>
-                        <ButtonsContainer  key={disponível.id}>
-                        {disponível.showtimes.map((time, i) => <><Link key={i} to={`/assentos/${time.id}`}><button data-test="showtime">{time.name}</button></Link></>)}
+                
+                <div key={disponível.id} data-test="movie-day">
+                        <Text key={i}>{disponível.weekday} - {disponível.date} {pegaData(disponível.date)} </Text>
+                        <ButtonsContainer  >
+                        {disponível.showtimes.map((time, i) => <Link onClick={(() => pegaData(disponível.date))} key={i} to={`/assentos/${time.id}`}><button  onClick={(() => pegaHorário(time.name))} data-test="showtime">{time.name}</button></Link> )}
                         </ButtonsContainer>
                  </div>
 
@@ -46,6 +59,7 @@ export default function SessionsPage() {
 
         </PageContainer>
         )
+        
     }
 }
 const Text = styled.p`

@@ -4,16 +4,23 @@ import SeatsPage from "./pages/SeatsPage/SeatsPage"
 import SessionsPage from "./pages/SessionsPage/SessionsPage"
 import SuccessPage from "./pages/SuccessPage/SuccessPage"
 import { Route, Routes, BrowserRouter } from "react-router-dom"
+import React from "react"
 
 export default function App() {
+    const [nomeDoFilme, setNomeDoFilme] = React.useState([]);
+    const [data, setData] = React.useState([]);
+    const [horário, setHorário] = React.useState([]);
+    const [lugar, setLugar] = React.useState([]);
+    const [compradorNome, setCompradorNome] = React.useState([]);
+    const [compradorCpf, setCompradorCpf] = React.useState([]);
     return (
         <BrowserRouter>
            <NavContainer>CINEFLEX</NavContainer>
            <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/sessoes/:idFilme" element={<SessionsPage />} />
-            <Route path="/assentos/:idSessao" element={<SeatsPage />} />
-            <Route path="/sucesso" element={<SuccessPage />} />
+            <Route path="/sessoes/:idFilme" element={<SessionsPage setNomeDoFilme={setNomeDoFilme} setData={setData} setHorário={setHorário} />} />
+            <Route path="/assentos/:idSessao" element={<SeatsPage setCompradorCpf={setCompradorCpf} setCompradorNome={setCompradorNome} setLugar={setLugar} lugar={lugar}/>} />
+            <Route path="/sucesso" element={<SuccessPage nomeDoFilme={nomeDoFilme} data={data} horário={horário} compradorCpf={compradorCpf} compradorNome={compradorNome} lugar={lugar} />} />
            </Routes>
         </BrowserRouter>
     )

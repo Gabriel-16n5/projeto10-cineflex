@@ -4,7 +4,7 @@ import { Link, Params, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 
-export default function SeatsPage() {
+export default function SeatsPage({setCompradorCpf, setCompradorNome, setLugar, lugar}) {
     const [assento, setAssento] = React.useState(null);
     const sessão = useParams();
     const [situaçãoAssento, setSituaçãoAssento] = React.useState("")
@@ -15,19 +15,22 @@ export default function SeatsPage() {
 
     function attDados(e){
         setForm({...form, [e.target.name]: e.target.value})
+        setCompradorCpf(form.cpf)
+        setCompradorNome(form.name)
         console.log(form)
     }
 
     function reservar(e){
         e.preventDefault()
         const body = {form, ids};
+        console.log(body)
         const promise = axios.post("https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many", body);
         promise.then(() => navegate("/sucesso"))
         promise.catch((nook) => console.log(nook.response.data))
     }
 
     function trocaCor(posição){
-        console.log(ids)
+        setLugar([...lugar, posição.name])
         if(situaçãoAssento.includes(posição)){
             let hold= 0;
             setSituaçãoAssento("")

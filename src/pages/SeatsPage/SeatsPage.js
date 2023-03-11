@@ -7,11 +7,20 @@ import axios from "axios";
 export default function SeatsPage() {
     const [assento, setAssento] = React.useState(null);
     const sessão = useParams();
+    const [situaçãoAssento, setSituaçãoAssento] = React.useState("")
+    const [situaçãoAssentoAux, setSituaçãoAssentoAux] = React.useState("")
+
+    function trocaCor(posição){
+        console.log(posição)
+        setSituaçãoAssento([...situaçãoAssento, posição]);
+        setSituaçãoAssentoAux([...situaçãoAssentoAux, posição])
+    }
 
     useEffect(() => {
         const promise = axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${sessão.idSessao}/seats`)
         promise.then((ok) => setAssento(ok.data))
-        
+        // promise.then((ok) => console.log(ok.data))
+
     }, [])
     
     if (assento === null){
@@ -25,23 +34,21 @@ export default function SeatsPage() {
 
             <SeatsContainer>
                 {assento.seats.map((posição) => 
-                <>
-                <SeatItem data-test="seat" key={posição.id}>{posição.name}</SeatItem>
-                </>
+                <SeatItem onClick={(() => trocaCor(posição))} data-test="seat" color={posição.isAvailable === false ? "#FBE192" : "" || situaçãoAssento.includes(posição)? "#1AAE9E" : "#C3CFD9"} border={situaçãoAssentoAux.includes(posição)? "Black" : "Green"} key={posição.id}>{posição.name}</SeatItem>
                 )}
             </SeatsContainer>
 
             <CaptionContainer>
                 <CaptionItem>
-                    <CaptionCircle data-test="seat" />
+                    <CaptionCircle color={"#1AAE9E"} border={"Green"} data-test="seat" />
                     Selecionado
                 </CaptionItem>
                 <CaptionItem>
-                    <CaptionCircle data-test="seat" />
-                    Disponível
+                    <CaptionCircle color={"#7B8B99"} data-test="seat" />
+                    Disponível  
                 </CaptionItem>
                 <CaptionItem>
-                    <CaptionCircle data-test="seat" />
+                    <CaptionCircle color={"#FBE192"} border={"Orange"} data-test="seat" />
                     Indisponível
                 </CaptionItem>
             </CaptionContainer>
@@ -114,8 +121,8 @@ const CaptionContainer = styled.div`
     margin: 20px;
 `
 const CaptionCircle = styled.div`
-    border: 1px solid blue;         // Essa cor deve mudar
-    background-color: lightblue;    // Essa cor deve mudar
+    border: 1px solid gray;
+    background-color:  ${props => props.color};
     height: 25px;
     width: 25px;
     border-radius: 25px;
@@ -123,6 +130,9 @@ const CaptionCircle = styled.div`
     align-items: center;
     justify-content: center;
     margin: 5px 3px;
+    :hover {
+        border: 1px solid ${props => props.border};  
+    }
 `
 const CaptionItem = styled.div`
     display: flex;
@@ -131,8 +141,8 @@ const CaptionItem = styled.div`
     font-size: 12px;
 `
 const SeatItem = styled.div`
-    border: 1px solid blue;         // Essa cor deve mudar
-    background-color: lightblue;    // Essa cor deve mudar
+    border: 1px solid gray;
+    background-color: ${props => props.color};
     height: 25px;
     width: 25px;
     border-radius: 25px;
@@ -142,6 +152,9 @@ const SeatItem = styled.div`
     align-items: center;
     justify-content: center;
     margin: 5px 3px;
+    :hover{
+        border: 1px solid ${props => props.border};
+    }
 `
 const FooterContainer = styled.div`
     width: 100%;

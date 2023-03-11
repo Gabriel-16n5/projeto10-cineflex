@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import React, { useEffect } from "react";
-import { Link, Params, useParams } from "react-router-dom";
+import { Link, Params, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 
@@ -9,13 +9,42 @@ export default function SeatsPage() {
     const sessão = useParams();
     const [situaçãoAssento, setSituaçãoAssento] = React.useState("")
     const [situaçãoAssentoAux, setSituaçãoAssentoAux] = React.useState("")
+    const [ids, setIds] = React.useState("")
+    const navegate = useNavigate();
+    const [form, setForm] = React.useState({ name: [], cpf: []});
+
+    function attDados(e){
+        setForm({...form, [e.target.name]: e.target.value})
+        console.log(form)
+    }
+
+    function reservar(e){
+        e.preventDefault()
+        const body = {form, ids};
+        const promise = axios.post("https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many", body);
+        promise.then(() => navegate("/sucesso"))
+        promise.catch((nook) => console.log(nook.response.data))
+    }
 
     function trocaCor(posição){
-        console.log(posição)
-        setSituaçãoAssento([...situaçãoAssento, posição]);
-        setSituaçãoAssentoAux([...situaçãoAssentoAux, posição])
+        console.log(ids)
+        if(situaçãoAssento.includes(posição)){
+            let hold= 0;
+            setSituaçãoAssento("")
+            setSituaçãoAssentoAux("")
+            hold = ids
+            hold = hold.toString()
+            const retirar = ids.filter(() => hold === posição.id)
+            setIds([retirar])
+
+        }else{
+            setSituaçãoAssento([...situaçãoAssento, posição]);
+            setSituaçãoAssentoAux([...situaçãoAssentoAux, posição])
+            setIds([...ids, posição.id])
+        }
+
         if(posição.isAvailable === false){
-            alert("Esse está ocupado")
+            alert("Esse assento não está disponível")
         }
     }
 
@@ -56,14 +85,26 @@ export default function SeatsPage() {
                 </CaptionItem>
             </CaptionContainer>
 
-            <FormContainer>
-                Nome do Comprador:
-                <input data-test="client-name" placeholder="Digite seu nome..." />
+            <FormContainer onSubmit={reservar}>
+                    <p>Nome do Comprador:</p>
+                    <input data-test="client-name" placeholder="Digite seu nome..." 
+                    type="text"
+                    name={"name"}
+                    value={form.name}
+                    onChange={attDados}
+                    required
+                    />
 
-                CPF do Comprador:
-                <input data-test="client-cpf" placeholder="Digite seu CPF..." />
+                    CPF do Comprador:
+                    <input data-test="client-cpf" placeholder="Digite seu CPF..." 
+                    type="number"
+                    name={"cpf"}
+                    value={form.cpf}
+                    onChange={attDados}
+                    required
+                    />
 
-                <Link to="/sucesso"><button data-test="book-seat-btn" >Reservar Assento(s)</button></Link>
+                    <button type="submit" data-test="book-seat-btn" >Reservar Assento(s)</button>
             </FormContainer>
 
             <FooterContainer data-test="footer">
@@ -80,6 +121,7 @@ export default function SeatsPage() {
     )
 }
 }
+
 
 const PageContainer = styled.div`
     display: flex;
@@ -102,7 +144,7 @@ const SeatsContainer = styled.div`
     justify-content: center;
     margin-top: 20px;
 `
-const FormContainer = styled.div`
+const FormContainer = styled.form`
     width: calc(100vw - 40px); 
     display: flex;
     flex-direction: column;

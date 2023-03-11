@@ -22,7 +22,11 @@ export default function SeatsPage({setCompradorCpf, setCompradorNome, setLugar, 
 
     function reservar(e){
         e.preventDefault()
-        const body = {form, ids};
+        const body = {
+            ids: ids,
+            name: form.name,
+            cpf: form.cpf
+        };
         console.log(body)
         const promise = axios.post("https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many", body);
         promise.then(() => navegate("/sucesso"))
@@ -54,7 +58,6 @@ export default function SeatsPage({setCompradorCpf, setCompradorNome, setLugar, 
     useEffect(() => {
         const promise = axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${sessão.idSessao}/seats`)
         promise.then((ok) => setAssento(ok.data))
-        // promise.then((ok) => console.log(ok.data))
 
     }, [])
     

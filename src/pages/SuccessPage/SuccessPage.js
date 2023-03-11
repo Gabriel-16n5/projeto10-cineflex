@@ -23,8 +23,8 @@ export default function SuccessPage({horário, data ,nomeDoFilme, compradorCpf, 
             <TextContainer>
                 <strong><p>Comprador</p></strong>
                 <div data-test="client-info">
-                    <p>Nome: {compradorNome}</p>
-                    <p>CPF: {compradorCpf}</p>
+                    <p>{`Nome: ${compradorNome}`}</p>
+                    <p>{`CPF: ${compradorCpf}`}</p>
                 </div>
             </TextContainer>
 

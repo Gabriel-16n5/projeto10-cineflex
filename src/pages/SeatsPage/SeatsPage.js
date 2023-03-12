@@ -25,7 +25,7 @@ export default function SeatsPage({setCompradorCpf, setCompradorNome, setLugar, 
         const body = {
             ids: ids,
             name: form.name,
-            CPF: form.cpf
+            cpf: form.cpf
         };
         
         const promise = axios.post("https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many", body);

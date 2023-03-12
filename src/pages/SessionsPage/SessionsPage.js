@@ -13,7 +13,6 @@ export default function SessionsPage({setNomeDoFilme, setData, setHorário}) {
     }
 
     function pegaData(data){
-        console.log(data)
         setData(data)
     }
 

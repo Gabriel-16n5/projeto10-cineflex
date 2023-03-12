@@ -16,7 +16,7 @@ export default function SuccessPage({horário, data ,nomeDoFilme, compradorCpf, 
             <TextContainer data-test="seats-info" >
                 <strong><p>Ingressos</p></strong>
 
-                {lugar.map((l) => <p>Assento {l}</p>)}
+                {lugar.map((l, i) => <p key={i}>Assento {l}</p>)}
 
             </TextContainer>
 

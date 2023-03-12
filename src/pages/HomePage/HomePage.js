@@ -11,7 +11,6 @@ export default function HomePage() {
         const promise = axios.get("https://mock-api.driven.com.br/api/v8/cineflex/movies");
         promise.then((ok) => { setListaFilmes(ok.data) })
     }, [])
-    console.log(listaFilmes)
     return (
         <PageContainer>
             Selecione o filme
